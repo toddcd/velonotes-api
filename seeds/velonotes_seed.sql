@@ -60,14 +60,15 @@ insert into mfr_bikes_geometry (mfr_bike_id,size,reach,top_tube_length,stack,whe
 values(1,'61',402,597,618,1043,425,627,67,285.5,72.5,73,600,190,861.5,50);
 
 
-insert into user_bikes(mfr_bike_id, geo_id)
-values(8,(select geo_id from mfr_bikes_geometry where "size" = 'large' ))
+insert into user_bikes(user_id, mfr_bike_id, geo_id)
+values(1, 8,(select geo_id from mfr_bikes_geometry where "size" = 'large' ))
+
+-- Test Data Bike 1
+insert into user_bike_positions(user_bike_id,"name",description,active,stem,stem_angle,handlebar,crank,seat,seat_height,handlebar_reach,handlebar_drop,setback)
+values(1,'cyclocross','cross setup',false,100,6,42,175,143,805,595,90,110 );
 
 insert into user_bike_positions(user_bike_id,"name",description,active,stem,stem_angle,handlebar,crank,seat,seat_height,handlebar_reach,handlebar_drop,setback)
-values(1,'cyclocross','cross setup',false,100,6,42,175,143,805,595,90,110 )
-
-insert into user_bike_positions(user_bike_id,"name",description,stem,stem_angle,handlebar,crank,seat,seat_height,handlebar_reach,handlebar_drop,setback)
-values(1,'road','road setup',true,120,6,42,175,143,805,595,110,110 )
+values(1,'road','road setup',true,120,6,42,175,143,805,595,110,110 );
 
 insert into user_bike_notes(user_bike_id, note_type, note)
 values(1, 'setup','tire pressure at 20psi front and 24psi rear');
@@ -77,3 +78,22 @@ values(1, 'maintenance','replaced chain');
 
 insert into user_bike_notes(user_bike_id, note_type, note)
 values(1, 'maintenance','replaced shift cables');
+
+-- Test Data Bike 2
+insert into user_bikes(user_id, mfr_bike_id, geo_id)
+values(1, 1,(select geo_id from mfr_bikes_geometry where "size" = '58' ));
+
+insert into user_bike_positions(user_bike_id,"name",description,active,stem,stem_angle,handlebar,crank,seat,seat_height,handlebar_reach,handlebar_drop,setback)
+values(2,'gravel','gravel setup',false,100,6,42,175,143,805,595,90,110 );
+
+insert into user_bike_positions(user_bike_id,"name",description, active,stem,stem_angle,handlebar,crank,seat,seat_height,handlebar_reach,handlebar_drop,setback)
+values(2,'road','rain bike setup',true,120,6,42,175,143,805,595,110,110 );
+
+insert into user_bike_notes(user_bike_id, note_type, note)
+values(2, 'setup','installed new full fenders');
+
+insert into user_bike_notes(user_bike_id, note_type, note)
+values(2, 'maintenance','replaced rear tire');
+
+insert into user_bike_notes(user_bike_id, note_type, note)
+values(2, 'maintenance','replaced bar tape');

@@ -9,7 +9,6 @@ bicyclesRouter
     .get((req, res, next) => {
         BicyclesService.getUserBikes(req.app.get('db'), 1)
             .then(bikes => {
-                //res.json(bikes)
                 res.json(BicyclesService.serializeBicycles(bikes))
             })
             .catch(next)
