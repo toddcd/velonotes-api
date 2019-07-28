@@ -2,11 +2,42 @@ const xss = require('xss')
 const Treeize = require('treeize')
 
 const BicyclesService = {
-    getUserBikes(db, user_id) {
+    getBicycles(db, user_id) {
         return db
             .from('user_bikes AS bikes')
             .select(
                 'bikes.user_id',
+                'bikes.user_bike_id',
+                ...bikeFields,
+                ...geometryFields,
+                ...positionFields,
+                ...notesFields
+            ).innerJoin(
+                'mfr_bikes AS mfr',
+                'mfr.mfr_bike_id',
+                'bikes.mfr_bike_id'
+            ).innerJoin(
+                'mfr_bikes_geometry AS geo',
+                'geo.geo_id',
+                'bikes.geo_id'
+            ).leftOuterJoin(
+                'user_bike_positions AS pos',
+                'pos.user_bike_id',
+                'bikes.user_bike_id'
+            ).leftOuterJoin(
+                'user_bike_notes AS notes',
+                'notes.user_bike_id',
+                'bikes.user_bike_id'
+            )
+            .where('bikes.user_id', user_id)
+    },
+
+    getBicycleById(db, bike_id) {
+        return db
+            .from('user_bikes AS bikes')
+            .select(
+                'bikes.user_id',
+                'bikes.user_bike_id',
                 ...bikeFields,
                 ...geometryFields,
                 ...positionFields,
@@ -27,13 +58,46 @@ const BicyclesService = {
                 'user_bike_notes AS notes',
                 'notes.user_bike_id',
                 'bikes.user_bike_id'
-            ).where('bikes.user_id', '=', user_id)
+            )
+            .where('bikes.user_bike_id', bike_id)
+    },
+
+    getNewBicycleById(db, bike_id) {
+        return db
+            .from('user_bikes AS bikes')
+            .select(
+                'bikes.user_id',
+                'bikes.user_bike_id',
+                ...bikeFields,
+                ...geometryFields,
+            ).innerJoin(
+                'mfr_bikes AS mfr',
+                'mfr.mfr_bike_id',
+                'bikes.mfr_bike_id'
+            ).innerJoin(
+                'mfr_bikes_geometry AS geo',
+                'geo.geo_id',
+                'bikes.geo_id'
+            )
+            .where('bikes.user_bike_id', bike_id)
+    },
+
+    insertBicycle(db, newBike){
+
+        return db
+            .insert(newBike)
+            .into('user_bikes')
+            .returning('*')
+            .then(([bike]) => bike)
+            .then(bike =>
+                BicyclesService.getNewBicycleById(db, bike.user_bike_id)
+            )
     },
 
     serializeBicycles(bicycles) {
-        let bikes = new Treeize()
-        bikes.grow(bicycles)
-        return bikes.getData()
+        let bikesTree = new Treeize()
+        bikesTree.grow(bicycles)
+        return bikesTree.getData()
     },
 }
 
