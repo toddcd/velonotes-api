@@ -20,18 +20,17 @@ const BicyclesService = {
                 'mfr_bikes_geometry AS geo',
                 'geo.geo_id',
                 'bikes.geo_id'
-            ).leftOuterJoin(
+            ).leftJoin(
                 'user_bike_positions AS pos',
                 'pos.user_bike_id',
                 'bikes.user_bike_id'
-            ).leftOuterJoin(
+            ).leftJoin(
                 'user_bike_notes AS notes',
                 'notes.user_bike_id',
                 'bikes.user_bike_id'
             )
             .where('bikes.user_id', user_id)
     },
-
     getBicycleById(db, bike_id) {
         return db
             .from('user_bikes AS bikes')
@@ -50,18 +49,17 @@ const BicyclesService = {
                 'mfr_bikes_geometry AS geo',
                 'geo.geo_id',
                 'bikes.geo_id'
-            ).innerJoin(
+            ).leftOuterJoin(
                 'user_bike_positions AS pos',
                 'pos.user_bike_id',
                 'bikes.user_bike_id'
-            ).innerJoin(
+            ).leftOuterJoin(
                 'user_bike_notes AS notes',
                 'notes.user_bike_id',
                 'bikes.user_bike_id'
             )
             .where('bikes.user_bike_id', bike_id)
     },
-
     getNewBicycleById(db, bike_id) {
         return db
             .from('user_bikes AS bikes')
@@ -82,8 +80,15 @@ const BicyclesService = {
             .where('bikes.user_bike_id', bike_id)
     },
 
-    insertBicycle(db, newBike){
+    getGeoId(db, mfr_bike_id , size) {
+        return db
+            .from("mfr_bikes_geometry AS mfr")
+            .select("geo_id")
+            .where('mfr.mfr_bike_id', mfr_bike_id)
+            .andWhere('mfr.size', size)
+    },
 
+    insertBicycle(db, newBike) {
         return db
             .insert(newBike)
             .into('user_bikes')
@@ -98,6 +103,26 @@ const BicyclesService = {
         let bikesTree = new Treeize()
         bikesTree.grow(bicycles)
         return bikesTree.getData()
+    },
+
+    async deleteBicycle(db, user_bike_id) {
+        await db('user_bike_positions')
+            .where({user_bike_id})
+            .delete()
+
+        await db('user_bike_notes')
+            .where({user_bike_id})
+            .delete()
+
+        await db('user_positions')
+        await db('user_positions')
+            .where({user_bike_id})
+            .delete()
+    },
+    updateBicycle(db, bike_id, bikeFieldsToUpdate) {
+        return db('user_bikes')
+            .where({bike_id})
+            .update(bikeFieldsToUpdate)
     },
 }
 
