@@ -6,6 +6,9 @@ const helmet = require('helmet');
 const { NODE_ENV } = require('./config');
 const authRouter = require('./auth/auth-router');
 const bicyclesRouter = require('./bicycles/bicycles-router');
+const positionsRouter = require('./positions/positions-router');
+const notesRouter = require('./notes/notes-router');
+const uiDataRouter = require('./uidata/uidata-router');
 
 const app = express();
 
@@ -19,6 +22,9 @@ app.use(cors());
 
 app.use('/api/auth', authRouter);
 app.use('/api/bicycles', bicyclesRouter);
+app.use('/api/positions', positionsRouter);
+app.use('/api/notes', notesRouter);
+app.use('/api/uidata', uiDataRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello, velonotes!')

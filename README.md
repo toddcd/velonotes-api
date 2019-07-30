@@ -1,17 +1,36 @@
-# Express Boilerplate!
+# Velonotes API!
 
-This is a boilerplate project used for starting new projects!
 
-## Set up
 
-Complete the following steps to start a new project (NEW-PROJECT-NAME):
+## Route Endpoints
+'/api/register'
+    1. POST '/register' //TO_DO
 
-1. Clone this repository to your local machine `git clone BOILERPLATE-URL NEW-PROJECTS-NAME`
-2. `cd` into the cloned repository
-3. Make a fresh start of the git history for this project with `rm -rf .git && git init`
-4. Install the node dependencies `npm install`
-5. Move the example Environment file to `.env` that will be ignored by git and read by the express server `mv example.env .env`
-6. Edit the contents of the `package.json` to use NEW-PROJECT-NAME instead of `"name": "express-boilerplate",`
+'/api/auth'
+    1. POST '/login'
+      
+'/api/bicycles'
+    1. GET '/'
+    2. POST '/'
+    3. GET '/:bike_id'
+    4. DELETE '/:bike_id'
+    5. PATCH '/:bike_id' //TO_DO
+        
+'/api/positions'
+    1. POST '/'
+    2. GET '/:position_id'
+    3. DELETE '/:position_id'
+    4. PATCH '/:position_id'
+
+'/api/notes'
+    1. POST '/'
+    2. GET '/:note_id'
+    3. DELETE '/:note_id'
+    4. PATCH '/:note_id'
+    
+'/api/uidata'
+    1. '/make'
+    2. '/size'
 
 ## Scripts
 
