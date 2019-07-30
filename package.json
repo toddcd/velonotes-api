@@ -1,5 +1,5 @@
 {
-  "name": "express-boilerplate",
+  "name": "velonote-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -14,8 +14,11 @@
     "deploy": "git push heroku master"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "engines": {
+    "node": "10.16.0"
+  },
+  "author": "Todd D. Davis",
+  "license": "",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
