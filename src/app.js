@@ -4,6 +4,8 @@ const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
 const { NODE_ENV } = require('./config');
+const authRouter = require('./auth/auth-router');
+const bicyclesRouter = require('./bicycles/bicycles-router');
 
 const app = express();
 
@@ -15,8 +17,11 @@ app.use(morgan(morganOption));
 app.use(helmet());
 app.use(cors());
 
+app.use('/api/auth', authRouter);
+app.use('/api/bicycles', bicyclesRouter);
+
 app.get('/', (req, res) => {
-    res.send('Hello, boilerplate!')
+    res.send('Hello, velonotes!')
 });
 
 app.use(function errorHandler(error, req, res, next) {
@@ -28,6 +33,6 @@ app.use(function errorHandler(error, req, res, next) {
         response = {message: error.message, error}
     }
     res.status(500).json(response)
-})
+});
 
 module.exports = app;
