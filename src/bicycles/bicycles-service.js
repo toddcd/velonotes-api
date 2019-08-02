@@ -7,7 +7,6 @@ const BicyclesService = {
             .from('user_bikes AS bikes')
             .select(
                 'bikes.user_id',
-                'bikes.user_bike_id',
                 ...bikeFields,
                 ...geometryFields,
                 ...positionFields,
@@ -102,7 +101,7 @@ const BicyclesService = {
     serializeBicycles(bicycles) {
         let bikesTree = new Treeize()
         bikesTree.grow(bicycles)
-        return bikesTree.getData()
+        return bikesTree.getData()[0]
     },
 
     async deleteBicycle(db, user_bike_id) {
