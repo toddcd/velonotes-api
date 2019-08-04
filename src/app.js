@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
 const { NODE_ENV } = require('./config');
+const usersRouter = require('./users/users-router');
 const authRouter = require('./auth/auth-router');
 const bicyclesRouter = require('./bicycles/bicycles-router');
 const positionsRouter = require('./positions/positions-router');
@@ -20,6 +21,7 @@ app.use(morgan(morganOption));
 app.use(helmet());
 app.use(cors());
 
+app.use('/api/register', usersRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/bicycles', bicyclesRouter);
 app.use('/api/positions', positionsRouter);
