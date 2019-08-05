@@ -7,7 +7,6 @@ const BicyclesService = {
             .from('user_bikes AS bikes')
             .select(
                 'bikes.user_id',
-                'bikes.user_bike_id',
                 ...bikeFields,
                 ...geometryFields,
                 ...positionFields,
@@ -31,12 +30,35 @@ const BicyclesService = {
             )
             .where('bikes.user_id', user_id)
     },
+    getGridBicycles(db, user_id) {
+        return db
+            .from('user_bikes AS bikes')
+            .select(
+                'bikes.user_id',
+                ...gridFields
+            ).innerJoin(
+                'mfr_bikes AS mfr',
+                'mfr.mfr_bike_id',
+                'bikes.mfr_bike_id'
+            ).innerJoin(
+                'mfr_bikes_geometry AS geo',
+                'geo.geo_id',
+                'bikes.geo_id'
+            ).leftJoin(
+                'user_bike_positions AS pos',
+                'pos.user_bike_id',
+                'bikes.user_bike_id'
+            )
+            .where('bikes.user_id', user_id)
+    },
     getBicycleById(db, bike_id) {
         return db
             .from('user_bikes AS bikes')
             .select(
                 'bikes.user_id',
                 'bikes.user_bike_id',
+                'bikes.nick_name',
+                'bikes.date_created',
                 ...bikeFields,
                 ...geometryFields,
                 ...positionFields,
@@ -102,7 +124,7 @@ const BicyclesService = {
     serializeBicycles(bicycles) {
         let bikesTree = new Treeize()
         bikesTree.grow(bicycles)
-        return bikesTree.getData()
+        return bikesTree.getData()[0]
     },
 
     async deleteBicycle(db, user_bike_id) {
@@ -129,10 +151,51 @@ const BicyclesService = {
 const bikeFields = [
     {
         'bicycles:user_bike_id': 'bikes.user_bike_id',
+        'bicycles:nick_name': 'bikes.nick_name',
+        'bicycles:date_created': 'bikes.date_created',
         'bicycles:mfr_bike_id': 'mfr.mfr_bike_id',
         'bicycles:make': 'mfr.make',
         'bicycles:model': 'mfr.model',
-        'bicycles:year': 'mfr.year'
+        'bicycles:year': 'mfr.year',
+    }
+]
+
+const gridFields = [
+    {
+        'user_bike_id': 'bikes.user_bike_id',
+        'date_created': 'bikes.date_created',
+        'mfr_bike_id': 'mfr.mfr_bike_id',
+        'make': 'mfr.make',
+        'model': 'mfr.model',
+        'year': 'mfr.year',
+        'geo_id': 'geo.geo_id',
+        'size': 'geo.size',
+        'reach': 'geo.reach',
+        'stack': 'geo.stack',
+        'top_tube_length': 'geo.top_tube_length',
+        'head_tube_length': 'geo.head_tube_length',
+        'head_tube_angle': 'geo.head_tube_angle',
+        'seat_tube_length': 'geo.seat_tube_length',
+        'seat_tube_angle': 'geo.seat_tube_angle',
+        'wheelbase': 'geo.wheelbase',
+        'chainstay': 'geo.chainstay',
+        'bb_drop': 'geo.bb_drop',
+        'standover': 'geo.standover',
+        'rake': 'geo.rake',
+        'trail': 'geo.trail',
+        'position_id': 'pos.position_id',
+        'active': 'pos.active',
+        'name': 'pos.name',
+        'description': 'pos.description',
+        'stem': 'pos.stem',
+        'stem_angle': 'pos.stem_angle',
+        'handlebar': 'pos.handlebar',
+        'crank': 'pos.crank',
+        'seat': 'pos.seat',
+        'handlebar_reach': 'pos.handlebar_reach',
+        'handlebar_drop': 'pos.handlebar_drop',
+        'setback': 'pos.setback',
+        'seat_height': 'pos.seat_height'
     }
 ]
 
@@ -152,7 +215,7 @@ const geometryFields = [
         'bicycles:geometry:bb_drop': 'geo.bb_drop',
         'bicycles:geometry:standover': 'geo.standover',
         'bicycles:geometry:rake': 'geo.rake',
-        'bicycles:geometry:trail': 'geo.trail',
+        'bicycles:geometry:trail': 'geo.trail'
     }
 ]
 

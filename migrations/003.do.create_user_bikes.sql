@@ -6,6 +6,7 @@ create table user_bikes (
 	mfr_bike_id INTEGER NOT NULL,
 	geo_id INTEGER NOT NULL,
 	nick_name TEXT,
+	image_location TEXT,
 	date_created TIMESTAMP NOT NULL DEFAULT now(),
  	date_modified TIMESTAMP
 );

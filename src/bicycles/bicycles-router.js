@@ -12,13 +12,19 @@ bicyclesRouter
     .get((req, res, next) => {
         BicyclesService.getBicycles(req.app.get('db'), req.user.user_id)
             .then(bikes => {
-                res.json(BicyclesService.serializeBicycles(bikes))
+                // if current user has no bikes
+                // return 204 for not content
+                if (bikes.length === 0) {
+                    res.status(204).end()
+                }else{
+                    res.json(BicyclesService.serializeBicycles(bikes))
+                }
             })
             .catch(next)
     })
     .post(requireAuth, jsonBodyParser, (req, res, next) => {
-        const { mfr_bike_id, geo_id } = req.body
-        const newBike = {mfr_bike_id, geo_id}
+        const {mfr_bike_id, geo_id, nick_name} = req.body
+        const newBike = {mfr_bike_id, geo_id, nick_name}
 
         for (const [key, value] of Object.entries(newBike)) {
             if (value == null) {
@@ -44,6 +50,23 @@ bicyclesRouter
     })
 
 bicyclesRouter
+    .route('/grid')
+    .all(requireAuth)
+    .get((req, res, next) => {
+        BicyclesService.getGridBicycles(req.app.get('db'), req.user.user_id)
+            .then(bikes => {
+                // if current user has no bikes
+                // return 204 for not content
+                if (bikes.length === 0) {
+                    res.status(204).end()
+                }else{
+                    res.json(bikes)
+                }
+            })
+            .catch(next)
+    })
+
+bicyclesRouter
     .route('/:bike_id')
     .all(requireAuth)
     .all(checkBikeExists)
@@ -61,9 +84,7 @@ bicyclesRouter
                 res.status(204).end()
             })
     })
-    .patch(jsonBodyParser, (req, res) => {
 
-    })
 
 /* async/await syntax for promises */
 async function checkBikeExists(req, res, next) {
