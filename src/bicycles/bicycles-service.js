@@ -151,6 +151,7 @@ const BicyclesService = {
 const bikeFields = [
     {
         'bicycles:user_bike_id': 'bikes.user_bike_id',
+        'bicycles:nick_name': 'bikes.nick_name',
         'bicycles:date_created': 'bikes.date_created',
         'bicycles:mfr_bike_id': 'mfr.mfr_bike_id',
         'bicycles:make': 'mfr.make',
