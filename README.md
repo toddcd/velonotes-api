@@ -1,6 +1,6 @@
 # Velonotes API!
 
-This API supports http:velonotes.com
+This API supports http://velonotes.com
 
 https://github.com/toddcd/velonotes-client
 
