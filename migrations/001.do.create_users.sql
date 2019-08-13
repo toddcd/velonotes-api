@@ -1,3 +1,10 @@
+drop table IF EXISTS user_bike_positions;
+drop table IF EXISTS user_bike_notes;
+drop table IF EXISTS user_bikes;
+drop table IF EXISTS mfr_bikes_geometry;
+drop table IF EXISTS mfr_bikes;
+drop table IF EXISTS users
+
 --//-----------------------------//
 -- User info
 --//-----------------------------//
